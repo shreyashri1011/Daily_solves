@@ -4,7 +4,9 @@ class NumArray(object):
         """
         :type nums: List[int]
         """
-        self.nums=nums
+        self.acc_nums=[0]
+        for num in nums:
+            self.acc_nums.append(self.acc_nums[-1]+num)
 
     def sumRange(self, left, right):
         """
@@ -12,7 +14,7 @@ class NumArray(object):
         :type right: int
         :rtype: int
         """
-        return sum(self.nums[left:right+1])
+        return self.acc_nums[right+1] - self.acc_nums[left]
 
 
 # Your NumArray object will be instantiated and called as such:
