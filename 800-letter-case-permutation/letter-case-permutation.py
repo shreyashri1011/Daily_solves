@@ -1,17 +1,18 @@
 class Solution(object):
-    def letterCasePermutation(self, S):
+    def letterCasePermutation(self, s):
         """
         :type S: str
         :rtype: List[str]
         """
-        def backtrack(sub="", i=0):
-            if len(sub) == len(S):
-                res.append(sub)
+        output=[""]
+        for c in s:
+            tmp=[]
+            if c.isalpha():
+                for o in output:
+                    tmp.append(o+c.lower())
+                    tmp.append(o+c.upper())
             else:
-                if S[i].isalpha():
-                    backtrack(sub + S[i].swapcase(), i + 1)
-                backtrack(sub + S[i], i + 1)
-                
-        res = []
-        backtrack()
-        return res
+                for o in output:
+                    tmp.append(o+c)
+            output=tmp
+        return output
