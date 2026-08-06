@@ -1,20 +1,20 @@
 class Solution(object):
-    def reverseBetween(self, head, m, n):
+    def reverseBetween(self, head, left, right):
         """
         :type head: ListNode
         :type m: int
         :type n: int
         :rtype: ListNode
         """
-        if not head or m == n: return head
-        p = dummy = ListNode(None)
-        dummy.next = head
-        for i in range(m-1): p = p.next
-        tail = p.next
-
-        for i in range(n-m):
-            tmp = p.next                  # a)
-            p.next = tail.next            # b)
-            tail.next = tail.next.next    # c)
-            p.next.next = tmp             # d)
-        return dummy.next
+        dummy_head=ListNode(-1,head)
+        left_prev,current_node=dummy_head,head
+        for i in range(left -1):
+            left_prev,current_node=current_node,current_node.next
+        prev=None
+        for i in range(right-left+1):
+            next_pointer=current_node.next
+            current_node.next=prev
+            prev,current_node=current_node,next_pointer
+        left_prev.next.next=current_node
+        left_prev.next=prev
+        return dummy_head.next
