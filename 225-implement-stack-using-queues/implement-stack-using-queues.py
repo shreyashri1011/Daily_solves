@@ -9,24 +9,27 @@ class MyStack(object):
         :rtype: None
         """
         self.q.append(x)
-        v=len(self.q)-1
-        i=0
-        while i<v:
-            self.q.append(self.q.popleft())
-            i+=1
         
 
     def pop(self):
         """
         :rtype: int
         """
+        for i in range(len(self.q)-1):
+            self.push(self.q.popleft())
         return self.q.popleft()
 
     def top(self):
         """
         :rtype: int
         """
-        return self.q[0]
+        for i in range(len(self.q) - 1):
+            self.q.append(self.q.popleft())
+
+        x = self.q.popleft()
+        self.q.append(x)
+
+        return x
 
     def empty(self):
         """
