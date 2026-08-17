@@ -11,11 +11,11 @@ class Solution(object):
         :type val: int
         :rtype: Optional[TreeNode]
         """
-        if not root:
-            return
-        if root.val==val:
-            return root
-        if root.val<val:
-            return self.searchBST(root.right,val)
-        else:
-            return self.searchBST(root.left,val)
+        while root:
+            if root.val==val:
+                return root
+            elif root.val<val:
+                root=root.right
+            else:
+                root=root.left
+        return None
