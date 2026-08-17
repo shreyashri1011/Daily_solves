@@ -13,7 +13,28 @@ class Solution(object):
         :type q: TreeNode
         :rtype: TreeNode
         """
-        if root in (None, p, q): return root
-        left, right = (self.lowestCommonAncestor(kid, p, q)
-                   for kid in (root.left, root.right))
-        return root if left and right else left or right
+        queue=deque([root])
+        parent={root:None}
+        while queue:
+            node=queue.popleft()
+            if node.left:
+                queue.append(node.left)
+                parent[node.left]=node
+            if node.right:
+                queue.append(node.right)
+                parent[node.right]=node
+            if p in parent and q in parent:
+                break
+        ancestors=set()
+        while p:
+            ancestors.add(p)
+            p=parent[p]
+        while q:
+            if q in ancestors:
+                return q
+            q=parent[q]
+        pointer1,pointer2=p,q
+        while pointer1 != pointer2:
+            pointer1=parent[pointer1] if pointer1 else q
+            pointer2=parent[pointer2] if pointer2 else p
+        return pointer1
