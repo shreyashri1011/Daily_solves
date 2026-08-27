@@ -1,8 +1,8 @@
-class Solution:
-    def findKthLargest(self, nums: List[int], k: int) -> int:
-        minheap = []
-        for i in nums:
-            heapq.heappush(minheap, i)
-            if len(minheap) > k:
-                heapq.heappop(minheap)
-        return minheap[0]
+class Solution(object):
+    def findKthLargest(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        return heapq.nlargest(k,nums)[-1]
