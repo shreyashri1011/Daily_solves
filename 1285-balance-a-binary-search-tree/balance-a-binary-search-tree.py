@@ -1,25 +1,61 @@
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, val=0, left=None, right=None):
-#         self.val = val
-#         self.left = left
-#         self.right = right
-class Solution:
-    def balanceBST(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        def in_order_traversal(node):
-            if not node:
-                return []
+from collections import deque
 
-            return in_order_traversal(node.left) + [node.val] + in_order_traversal(node.right)
+class Solution(object):
 
-        def build_balanced_bst(elements):
-            if not elements:
-                return None
-            mid = len(elements) // 2
-            node = TreeNode(elements[mid])
-            node.left = build_balanced_bst(elements[:mid])
-            node.right = build_balanced_bst(elements[mid + 1:])
-            return node
+    def inorder_traversal(self, root):
+        nodes = []
+        stack = []
+        current = root
 
-        sorted_elements = in_order_traversal(root)
-        return build_balanced_bst(sorted_elements)
+        while current or stack:
+
+            while current:
+                stack.append(current)
+                current = current.left
+
+            current = stack.pop()
+            nodes.append(current.val)
+
+            current = current.right
+
+        return nodes
+
+    def balanceBST(self, root):
+
+        if not root:
+            return None
+
+        # Convert TreeNode → sorted list
+        nums = self.inorder_traversal(root)
+
+        # NOW nums is a list
+        n = len(nums)
+
+        mid = n // 2
+
+        new_root = TreeNode(nums[mid])
+
+        q = deque()
+
+        q.append((new_root, 0, mid - 1))
+        q.append((new_root, mid + 1, n - 1))
+
+        while q:
+
+            parent, left, right = q.popleft()
+
+            if left <= right:
+
+                mid = (left + right) // 2
+
+                child = TreeNode(nums[mid])
+
+                if nums[mid] < parent.val:
+                    parent.left = child
+                else:
+                    parent.right = child
+
+                q.append((child, left, mid - 1))
+                q.append((child, mid + 1, right))
+
+        return new_root
