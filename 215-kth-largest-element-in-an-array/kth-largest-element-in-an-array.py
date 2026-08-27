@@ -5,4 +5,9 @@ class Solution(object):
         :type k: int
         :rtype: int
         """
-        return heapq.nlargest(k,nums)[-1]
+        heap=[]
+        for i in nums:
+            heapq.heappush(heap,i)
+        for i in range(len(nums)-k):
+            heapq.heappop(heap)
+        return heapq.heappop(heap)
