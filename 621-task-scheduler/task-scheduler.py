@@ -1,24 +1,24 @@
-class Solution:
-    def leastInterval(self, tasks: List[str], n: int) -> int:
-        task_count = [0] * 26
-        total_tasks = 0
-        maxx = 0
-        freq = 0
-        
-        
-        for task in tasks:
-            idx = ord(task) - 65
-            task_count[idx] += 1
-            total_tasks += 1
-            
-            
-            if task_count[idx] > maxx:
-                maxx = task_count[idx]
-        
-        
-        for count in task_count:
-            if count == maxx:
-                freq += 1
-        
-        
-        return max((n + 1) * (maxx - 1) + freq, total_tasks)
+class Solution(object):
+    def leastInterval(self, tasks, n):
+        """
+        :type tasks: List[str]
+        :type n: int
+        :rtype: int
+        """
+        task_counts=Counter(tasks)
+        max_heap=[]
+        for count in task_counts.values():
+            max_heap.append(-count)
+        heapq.heapify(max_heap)
+        time=0
+        wait_queue=deque()
+        while max_heap or wait_queue:
+            time+=1
+            if max_heap:
+                current_task=heapq.heappop(max_heap)
+                current_task+=1
+                if current_task!=0:
+                    wait_queue.append((current_task,time+n))
+            if wait_queue and wait_queue[0][1]==time:
+                heapq.heappush(max_heap,wait_queue.popleft()[0])
+        return time
