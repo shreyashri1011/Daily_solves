@@ -4,16 +4,21 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
-        seen = set()
-        left = 0
-        max_length = 0
-
-        for right in range(len(s)):
-            while s[right] in seen:
-                seen.remove(s[left])
-                left += 1
-
-            seen.add(s[right])
-            max_length = max(max_length, right - left + 1)
-
-        return max_length
+        seen = {}
+        start = 0
+        max_len = 0
+        
+        for end, char in enumerate(s):
+            # If the character is inside the current window, move the start pointer past its last seen index
+            if char in seen and seen[char] >= start:
+                start = seen[char] + 1
+            
+            # Store or update the character's last seen index
+            seen[char] = end
+            
+            # Calculate current window length and update max_len
+            current_len = end - start + 1
+            if current_len > max_len:
+                max_len = current_len
+            
+        return max_len
