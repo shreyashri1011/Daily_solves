@@ -5,41 +5,31 @@ class Solution(object):
         :type nums2: List[int]
         :rtype: float
         """
-        merged = []
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
 
-        i = 0
-        j = 0
+        m, n = len(nums1), len(nums2)
+        low, high = 0, m
+        total_left = (m + n + 1) // 2
 
-        # Compare elements from both arrays
-        while i < len(nums1) and j < len(nums2):
+        while low <= high:
+            i = (low + high) // 2
+            j = total_left - i
 
-            if nums1[i] <= nums2[j]:
-                merged.append(nums1[i])
-                i += 1
+            nums1_left_max = float('-inf') if i == 0 else nums1[i - 1]
+            nums1_right_min = float('inf') if i == m else nums1[i]
+
+            nums2_left_max = float('-inf') if j == 0 else nums2[j - 1]
+            nums2_right_min = float('inf') if j == n else nums2[j]
+
+            if nums1_left_max <= nums2_right_min and nums2_left_max <= nums1_right_min:
+                if (m + n) % 2 == 1:
+                    return float(max(nums1_left_max, nums2_left_max))
+                else:
+                    max_left = max(nums1_left_max, nums2_left_max)
+                    min_right = min(nums1_right_min, nums2_right_min)
+                    return (max_left + min_right) / 2.0
+            elif nums1_left_max > nums2_right_min:
+                high = i - 1
             else:
-                merged.append(nums2[j])
-                j += 1
-
-        # Add remaining elements from nums1
-        while i < len(nums1):
-            merged.append(nums1[i])
-            i += 1
-
-        # Add remaining elements from nums2
-        while j < len(nums2):
-            merged.append(nums2[j])
-            j += 1
-
-        # Find median
-        n = len(merged)
-
-        if n % 2 == 1:
-            # Odd number of elements
-            return float(merged[n // 2])
-
-        else:
-            # Even number of elements
-            middle1 = merged[n // 2 - 1]
-            middle2 = merged[n // 2]
-
-            return (middle1 + middle2) / 2.0
+                low = i + 1
