@@ -4,18 +4,17 @@ class Solution(object):
         :type x: int
         :rtype: int
         """
-        sign = -1 if x < 0 else 1
+        rev=0
+        if x<0:
+            sign=-1
+        else:
+            sign=1
         x=abs(x)
-        
-        result=0
-
-        while x > 0:
-            digit=x%10
+        while x>0:
+            rem=x%10
+            rev=rev*10+rem
             x=x//10
-
-            result=result*10 + digit
-        result= result*sign
-
-        if result < -2**31 or result > 2**31-1: 
+        rev *= sign
+        if rev < -2**31 or rev>2**31-1:
             return 0
-        return result
+        return rev
